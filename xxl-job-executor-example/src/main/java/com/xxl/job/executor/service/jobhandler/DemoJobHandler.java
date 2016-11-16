@@ -2,10 +2,13 @@ package com.xxl.job.executor.service.jobhandler;
 
 import com.xxl.job.core.handler.IJobHandler;
 import com.xxl.job.core.handler.annotation.JobHander;
+
+import org.apache.http.impl.cookie.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 
@@ -19,6 +22,7 @@ import java.util.concurrent.TimeUnit;
  * 
  * @author xuxueli 2015-12-19 19:43:36
  */
+@SuppressWarnings("deprecation")
 @JobHander(value="demoJobHandler")
 @Service
 public class DemoJobHandler extends IJobHandler {
@@ -27,7 +31,8 @@ public class DemoJobHandler extends IJobHandler {
 	@Override
 	public void execute(String... params) throws Exception {
 		logger.info("XXL-JOB, Hello World.");
-		
+//		Date date = new Date();
+//		System.out.println("xxl-job-timestamp:"+DateUtils.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
 		for (int i = 0; i < 2; i++) {
 			logger.info("beat at:{}", i);
 			TimeUnit.SECONDS.sleep(2);

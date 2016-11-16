@@ -22,7 +22,7 @@ public class JobRegistryHelper {
 	private static JobRegistryHelper helper = new JobRegistryHelper();
 	private ConcurrentHashMap<String, List<String>> registMap = new ConcurrentHashMap<String, List<String>>();
 
-	public JobRegistryHelper(){
+	protected JobRegistryHelper(){
 		Thread registryThread = new Thread(new Runnable() {
 			@Override
 			public void run() {

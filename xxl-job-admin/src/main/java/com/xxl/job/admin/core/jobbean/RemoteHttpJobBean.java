@@ -13,6 +13,8 @@ import com.xxl.job.core.router.model.RequestModel;
 import com.xxl.job.core.router.model.ResponseModel;
 import com.xxl.job.core.util.XxlJobNetCommUtil;
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.time.DateFormatUtils;
+import org.apache.commons.lang.time.DateUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
@@ -105,7 +107,8 @@ public class RemoteHttpJobBean extends QuartzJobBean {
 			 String address = addressList.get(0);
 			 // store real address
 			 jobLog.setExecutorAddress(address);
-
+//			 logger.info();
+			 System.out.println("管理平台admin，向执行器发出执行命令："+DateFormatUtils.format(new Date(), "yyyy-MM-dd HH:mm:ss"));
 			 ResponseModel triggerCallback = XxlJobNetCommUtil.postHex(XxlJobNetCommUtil.addressToUrl(address), requestModel);
 			 String failoverMessage = MessageFormat.format("Trigger running, <br>>>>[address] : {0}, <br>>>>[status] : {1}, <br>>>>[msg] : {2} <br><hr>", address, triggerCallback.getStatus(), triggerCallback.getMsg());
 			 triggerCallback.setMsg(failoverMessage);

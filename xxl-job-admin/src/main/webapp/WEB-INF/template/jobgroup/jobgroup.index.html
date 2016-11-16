@@ -2,7 +2,7 @@
 <html>
 <head>
   	<title>任务调度中心</title>
-  	<#import "/common/common.macro.ftl" as netCommon>
+  	<#import "/common/common.macro.html" as netCommon>
 	<@netCommon.commonStyle />
 	<!-- DataTables -->
   	<link rel="stylesheet" href="${request.contextPath}/static/adminlte/plugins/datatables/dataTables.bootstrap.css">
@@ -11,13 +11,8 @@
 </head>
 <body class="hold-transition skin-blue sidebar-mini <#if cookieMap?exists && "off" == cookieMap["adminlte_settings"].value >sidebar-collapse</#if> ">
 <div class="wrapper">
-	<!-- header -->
-	<@netCommon.commonHeader />
-	<!-- left -->
-	<@netCommon.commonLeft />
-	
 	<!-- Content Wrapper. Contains page content -->
-	<div class="content-wrapper">
+	<div class="content-wrapper" style="margin-left: 0px">
 		<!-- Content Header (Page header) -->
 		<section class="content-header">
 			<h1>执行器管理<small>任务调度中心</small></h1>
@@ -140,9 +135,6 @@
             </div>
         </div>
     </div>
-	
-	<!-- footer -->
-	<@netCommon.commonFooter />
 </div>
 
 <@netCommon.commonScript />

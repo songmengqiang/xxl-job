@@ -1,18 +1,19 @@
 package com.xxl.job.core.router.thread;
 
-import com.xxl.job.core.handler.IJobHandler;
-import com.xxl.job.core.log.XxlJobFileAppender;
-import com.xxl.job.core.router.model.RequestModel;
-import com.xxl.job.core.router.model.ResponseModel;
-import org.eclipse.jetty.util.ConcurrentHashSet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+
+import org.eclipse.jetty.util.ConcurrentHashSet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.xxl.job.core.handler.IJobHandler;
+import com.xxl.job.core.log.XxlJobFileAppender;
+import com.xxl.job.core.router.model.RequestModel;
+import com.xxl.job.core.router.model.ResponseModel;
 
 /**
  * handler thread
@@ -38,6 +39,7 @@ public class JobThread extends Thread{
 	}
 
 	public void pushTriggerQueue(RequestModel requestModel) {
+//	    System.out.println("请求进入队列！timeStamp:"+DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
 		if (triggerLogIdSet.contains(requestModel.getLogId())) {
 			logger.info("repeate trigger job, logId:{}", requestModel.getLogId());
 			return;
@@ -63,8 +65,9 @@ public class JobThread extends Thread{
 	@Override
 	public void run() {
 		while(!toStop){
-			try {
+			try {  
 				// to check toStop signal, we need cycle, so wo cannot use queue.take(), instand of poll(timeout)
+//			    System.out.println("job线程执行-timestamp:"+DateUtils.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss"));
 				RequestModel triggerDate = triggerQueue.poll(3L, TimeUnit.SECONDS);
 				if (triggerDate!=null) {
 					triggerLogIdSet.remove(triggerDate.getLogId());

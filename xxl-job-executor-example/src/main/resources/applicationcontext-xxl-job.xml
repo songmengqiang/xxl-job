@@ -65,5 +65,10 @@
 			<value>classpath:jdbc.properties</value>
 		</property>
 	</bean>
-
+	<!-- 配置05、一些配置信息 http://168.33.51.235:8080/xxl-job-admin/excutor/registry -->
+	<bean id="jobConstants" class="com.xxl.job.core.constants.JobConstants">
+		<property name="registryUrl" value="http://168.33.51.235:8080/xxl-job-admin/excutor/registry" />
+		<property name="adminFlagClass" value="com.xxl.job.admin.controller.RegistryExcutorController" />
+	</bean>
+	
 </beans>

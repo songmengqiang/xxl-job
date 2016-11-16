@@ -182,7 +182,7 @@ public final class DynamicSchedulerUtil implements ApplicationContextAware, Init
         // schedule : jobDetail + cronTrigger
         Date date = scheduler.scheduleJob(jobDetail, cronTrigger);
 
-        logger.info(">>>>>>>>>>> addJob success, jobDetail:{}, cronTrigger:{}, date:{}", jobDetail, cronTrigger, date);
+        logger.info(">>>>>>>>>>> addJob success, jobDetail:{"+jobDetail+"}, cronTrigger:{"+cronTrigger+"}, date:{"+date+"}");
         return true;
     }
     

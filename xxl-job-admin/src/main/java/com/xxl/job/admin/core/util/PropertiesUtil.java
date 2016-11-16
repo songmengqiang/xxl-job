@@ -53,6 +53,13 @@ public class PropertiesUtil {
 		}
 		return null;
 	}
+	public static String getString(String key,String defaultValue) {
+	    Properties prop = loadProperties(file_name);
+	    if (prop!=null) {
+	        return prop.getProperty(key,defaultValue);
+	    }
+	    return null;
+	}
 	
 	public static void main(String[] args) {
 		System.out.println(getString("triggerLogUrl"));

@@ -28,6 +28,7 @@ public class MailUtil {
 	private static String password;
 	private static String sendFrom;
 	private static String sendNick;
+	private static boolean isNeedSendEmail;
 	static{
 		host = PropertiesUtil.getString("mail.host");
 		port = PropertiesUtil.getString("mail.port");
@@ -35,6 +36,7 @@ public class MailUtil {
 		password = PropertiesUtil.getString("mail.password");
 		sendFrom = PropertiesUtil.getString("mail.sendFrom");
 		sendNick = PropertiesUtil.getString("mail.sendNick");
+		isNeedSendEmail = new Boolean(PropertiesUtil.getString("mail.isNeedSendEmail","false").trim());
 	}
 	
 	/**
@@ -67,6 +69,9 @@ public class MailUtil {
 	 */
 	@SuppressWarnings("null")
 	public static boolean sendMailSpring(String toAddress, String mailSubject, String mailBody, boolean mailBodyIsHtml,File[] attachments) {
+	    if(!isNeedSendEmail){
+	        return true;
+	    }
 		JavaMailSender javaMailSender = null;//ResourceBundle.getInstance().getJavaMailSender();
 		try {
 			MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -111,6 +116,9 @@ public class MailUtil {
 	 */
 	public static boolean sendMail (String toAddress, String mailSubject, String mailBody, 
 			boolean mailBodyIsHtml, File[] attachments){
+	    if(!isNeedSendEmail){
+            return true;
+        }
         try {
 			// 创建邮件发送类 JavaMailSender (用于发送多元化邮件，包括附件，图片，html 等    )
         	JavaMailSenderImpl mailSender = new JavaMailSenderImpl();

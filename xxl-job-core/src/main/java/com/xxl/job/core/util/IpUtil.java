@@ -1,50 +1,59 @@
 package com.xxl.job.core.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.UnknownHostException;
-import java.util.Enumeration;
+import com.xxl.job.core.util.ip.IpGetChain;
+import com.xxl.job.core.util.ip.IpGetFromAdminChain;
+import com.xxl.job.core.util.ip.IpGetJavaUtilChain;
 
 /**
  * get ip
  * @author xuxueli 2016-5-22 11:38:05
  */
 public class IpUtil {
-	private static final Logger logger = LoggerFactory.getLogger(IpUtil.class);
+    private static final Logger logger      = LoggerFactory.getLogger(IpUtil.class);
+    private static IpUtil       singleten;
+    private List<IpGetChain>    ipGetChains = new ArrayList<IpGetChain>();
 
-	/**
-	 * 获取本机ip
-	 * @return ip
-	 */
-	public static String getIp() {
-		try {
-			Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
-			InetAddress address = null;
-			while (interfaces.hasMoreElements()) {
-				NetworkInterface ni = interfaces.nextElement();
-				Enumeration<InetAddress> addresses = ni.getInetAddresses();
-				while (addresses.hasMoreElements()) {
-					address = addresses.nextElement();
-					if (!address.isLoopbackAddress() && address.getHostAddress().indexOf(":") == -1) {
-						return address.getHostAddress();
-					}
-				}
-			}
-			logger.info("xxl job getHostAddress fail");
-			return null;
-		} catch (Throwable t) {
-			logger.error("xxl job getHostAddress error, {}", t);
-			return null;
-		}
-	}
+    private IpUtil() {
+        ipGetChains.add(new IpGetFromAdminChain());
+        ipGetChains.add(new IpGetJavaUtilChain());
+    }
 
-	public static void main(String[] args) throws UnknownHostException {
-		System.out.println(InetAddress.getLocalHost().getCanonicalHostName());
-		System.out.println(InetAddress.getLocalHost().getHostName());
-		System.out.println(getIp());
-	}
+    private String doGetIp() {
+        String ip = null;
+        for (IpGetChain ipGetChain : ipGetChains) {
+            ip = ipGetChain.getIp();
+            if(ip!=null){
+                break;
+            }
+        }
+        if (ip == null) {
+            logger.error("can not find ip address !");
+        } else {
+            return ip;
+        }
+        return null;
+    }
 
+    /**
+     * 获取本机ip
+     * @return ip
+     * @throws Exception 
+     */
+    public static String getIp() throws Exception {
+        if (singleten == null) {
+            singleten = new IpUtil();
+        }
+        String ip = singleten.doGetIp();
+        if(ip==null||ip.length()==0){
+            throw new Exception("can not find ip address !");
+        }
+        logger.debug("find local address :"+ip);
+        return ip;
+    }
 }

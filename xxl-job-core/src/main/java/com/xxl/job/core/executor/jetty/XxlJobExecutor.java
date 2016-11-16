@@ -1,6 +1,7 @@
 package com.xxl.job.core.executor.jetty;
 
 import com.xxl.job.core.handler.IJobHandler;
+import com.xxl.job.core.handler.JobHandlerFactory;
 import com.xxl.job.core.handler.annotation.JobHander;
 import com.xxl.job.core.registry.RegistHelper;
 import com.xxl.job.core.router.HandlerRouter;
@@ -18,6 +19,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -119,15 +121,20 @@ public class XxlJobExecutor implements ApplicationContextAware {
 	 * init job handler action
 	 */
 	public void initJobHandler(){
-		Map<String, Object> serviceBeanMap = XxlJobExecutor.applicationContext.getBeansWithAnnotation(JobHander.class);
-        if (serviceBeanMap!=null && serviceBeanMap.size()>0) {
-            for (Object serviceBean : serviceBeanMap.values()) {
-                if (serviceBean instanceof IJobHandler){
-                    String name = serviceBean.getClass().getAnnotation(JobHander.class).value();
-                    IJobHandler handler = (IJobHandler) serviceBean;
-                    HandlerRouter.registJobHandler(name, handler);
+        try {
+            Map<String, Object> serviceBeanMap = JobHandlerFactory.getHandlerMapBean(XxlJobExecutor.applicationContext.getBeansWithAnnotation(JobHander.class));
+            
+            if (serviceBeanMap!=null && serviceBeanMap.size()>0) {
+                  for (Entry<String, Object> entry : serviceBeanMap.entrySet()) {
+                    if(entry!=null){
+                        HandlerRouter.registJobHandler(entry.getKey(), (IJobHandler)entry.getValue());
+                    }
                 }
             }
+        } catch (BeansException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 	}
 

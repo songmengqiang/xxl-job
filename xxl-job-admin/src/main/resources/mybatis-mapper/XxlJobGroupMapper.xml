@@ -7,24 +7,24 @@
 		<result column="id" property="id" />
 	    <result column="app_name" property="appName" />
 	    <result column="title" property="title" />
-	    <result column="order" property="order" />
+	    <result column="grup_order" property="order" />
 	</resultMap>
 
 	<sql id="Base_Column_List">
 		t.id,
 		t.app_name,
 		t.title,
-		t.order
+		t.grup_order
 	</sql>
 
 	<select id="findAll" parameterType="java.lang.Integer" resultMap="XxlJobGroup">
 		SELECT <include refid="Base_Column_List" />
 		FROM XXL_JOB_QRTZ_TRIGGER_GROUP AS t
-		ORDER BY t.order ASC
+		ORDER BY t.grup_order ASC
 	</select>
 
 	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobGroup" >
-		INSERT INTO XXL_JOB_QRTZ_TRIGGER_GROUP ( `app_name`, `title`, `order`)
+		INSERT INTO XXL_JOB_QRTZ_TRIGGER_GROUP ( `app_name`, `title`, `grup_order`)
 		values ( #{appName}, #{title}, #{order});
 	</insert>
 
@@ -32,7 +32,7 @@
 		UPDATE XXL_JOB_QRTZ_TRIGGER_GROUP
 		SET `app_name` = #{appName},
 			`title` = #{title},
-			`order` = #{order}
+			`grup_order` = #{order}
 		WHERE id = #{id}
 	</update>
 

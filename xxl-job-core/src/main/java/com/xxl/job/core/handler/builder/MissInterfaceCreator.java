@@ -80,7 +80,7 @@ public class MissInterfaceCreator {
     MethodBuilder builder = new MethodReflectBuilder();
     private JobEntry<String,IJobHandler> buildMethod(JobEntry<JobHander, Method> jobEntry) {
         Method vaue = jobEntry.getValue();
-        String key =  jobEntry.getKey().value()==""?vaue.getName():jobEntry.getKey().value();
+        String key =  jobEntry.getKey().value().equals("")?vaue.getName():jobEntry.getKey().value();
         return buildMethod(vaue, key);
     }
 

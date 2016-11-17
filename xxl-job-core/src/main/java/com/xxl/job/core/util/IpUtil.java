@@ -20,7 +20,7 @@ public class IpUtil {
     private List<IpGetChain>    ipGetChains = new ArrayList<IpGetChain>();
 
     private IpUtil() {
-        ipGetChains.add(new IpGetFromAdminChain());
+//        ipGetChains.add(new IpGetFromAdminChain());
         ipGetChains.add(new IpGetJavaUtilChain());
     }
 

@@ -4,10 +4,10 @@
 <mapper namespace="XxlJobGroupMapper">
 	
 	<resultMap id="XxlJobGroup" type="com.xxl.job.admin.core.model.XxlJobGroup" >
-		<result column="id" property="id" />
-	    <result column="app_name" property="appName" />
-	    <result column="title" property="title" />
-	    <result column="grup_order" property="order" />
+		<result column="id" property="id" jdbcType = "INTEGER" />
+	    <result column="app_name" property="appName" jdbcType = "VARCHAR"  />
+	    <result column="title" property="title" jdbcType = "VARCHAR"   />
+	    <result column="grup_order" property="order" jdbcType = "VARCHAR"   />
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -19,32 +19,35 @@
 
 	<select id="findAll" parameterType="java.lang.Integer" resultMap="XxlJobGroup">
 		SELECT <include refid="Base_Column_List" />
-		FROM XXL_JOB_QRTZ_TRIGGER_GROUP AS t
+		FROM XXL_JOB_QRTZ_TRIGGER_GROUP t
 		ORDER BY t.grup_order ASC
 	</select>
 
-	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobGroup" >
-		INSERT INTO XXL_JOB_QRTZ_TRIGGER_GROUP ( `app_name`, `title`, `grup_order`)
-		values ( #{appName}, #{title}, #{order});
+	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobGroup" useGeneratedKeys="true" keyProperty="id" >
+	    <selectKey resultType="int" order="BEFORE" keyProperty="id">  
+	         SELECT SEQ_XXL_JOB_QRTZ_TRIGGER_GROUP.NEXTVAL FROM dual  
+	    </selectKey>  
+		INSERT INTO XXL_JOB_QRTZ_TRIGGER_GROUP (id, app_name, title, grup_order)
+		values ( #{id,jdbcType=INTEGER}, #{appName,jdbcType=VARCHAR}, #{title,jdbcType=VARCHAR}, #{order,jdbcType=VARCHAR})
 	</insert>
 
 	<update id="update" parameterType="com.xxl.job.admin.core.model.XxlJobGroup" >
 		UPDATE XXL_JOB_QRTZ_TRIGGER_GROUP
-		SET `app_name` = #{appName},
-			`title` = #{title},
-			`grup_order` = #{order}
-		WHERE id = #{id}
+		SET app_name = #{appName,jdbcType=VARCHAR},
+			title = #{title,jdbcType=VARCHAR},
+			grup_order = #{order,jdbcType=VARCHAR}
+		WHERE id = #{id,jdbcType=INTEGER}
 	</update>
 
 	<delete id="remove" parameterType="java.lang.Integer" >
 		DELETE FROM XXL_JOB_QRTZ_TRIGGER_GROUP
-		WHERE id = #{id}
+		WHERE id = #{id,jdbcType=INTEGER}
 	</delete>
 
 	<select id="load" parameterType="java.lang.Integer" resultMap="XxlJobGroup">
 		SELECT <include refid="Base_Column_List" />
-		FROM XXL_JOB_QRTZ_TRIGGER_GROUP AS t
-		WHERE t.id = #{id}
+		FROM XXL_JOB_QRTZ_TRIGGER_GROUP t
+		WHERE t.id = #{id,jdbcType=INTEGER}
 	</select>
 
 </mapper>

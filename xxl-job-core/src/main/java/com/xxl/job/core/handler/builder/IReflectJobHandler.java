@@ -16,4 +16,8 @@ public class IReflectJobHandler extends IJobHandler {
         //TODO 参数处理
         targetMethod.invoke(bean);
     }
+    @Override
+    public String toString() {
+        return "IReflectJobHandler [targetMethod=" + targetMethod + ", bean=" + bean + "]";
+    }
 }

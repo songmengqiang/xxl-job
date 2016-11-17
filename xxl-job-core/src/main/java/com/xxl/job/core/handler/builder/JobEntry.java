@@ -31,4 +31,9 @@ public class JobEntry<K,V> implements Entry<K,V> {
     public void setKey(K key){
        this.key = key;
     }
+
+    @Override
+    public String toString() {
+        return "JobEntry [key=" + key + ", value=" + value + "]";
+    }
 }

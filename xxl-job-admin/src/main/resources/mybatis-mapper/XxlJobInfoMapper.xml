@@ -4,27 +4,27 @@
 <mapper namespace="XxlJobInfoMapper">
 	
 	<resultMap id="XxlJobInfo" type="com.xxl.job.admin.core.model.XxlJobInfo" >
-		<result column="id" property="id" />
+		<result column="id" property="id" jdbcType = "INTEGER" />
 	
-		<result column="job_group" property="jobGroup" />
-	    <result column="job_name" property="jobName" />
-	    <result column="job_cron" property="jobCron" />
-	    <result column="job_desc" property="jobDesc" />
+		<result column="job_group" property="jobGroup" jdbcType = "INTEGER" />
+	    <result column="job_name" property="jobName" jdbcType = "VARCHAR" />
+	    <result column="job_cron" property="jobCron" jdbcType = "VARCHAR"/>
+	    <result column="job_desc" property="jobDesc" jdbcType = "VARCHAR"/>
 	    
-	    <result column="add_time" property="addTime" />
-	    <result column="update_time" property="updateTime" />
+	    <result column="add_time" property="addTime" jdbcType = "TIMESTAMP"/>
+	    <result column="update_time" property="updateTime" jdbcType = "TIMESTAMP"/>
 	    
-	    <result column="author" property="author" />
-	    <result column="alarm_email" property="alarmEmail" />
+	    <result column="author" property="author" jdbcType = "VARCHAR"/>
+	    <result column="alarm_email" property="alarmEmail" jdbcType = "VARCHAR"/>
 
-		<result column="executor_handler" property="executorHandler" />
-	    <result column="executor_param" property="executorParam" />
+		<result column="executor_handler" property="executorHandler" jdbcType = "VARCHAR"/>
+	    <result column="executor_param" property="executorParam" jdbcType = "VARCHAR"/>
 	    
-	    <result column="glue_switch" property="glueSwitch" />
-	    <result column="glue_source" property="glueSource" />
-	    <result column="glue_remark" property="glueRemark" />
+	    <result column="glue_switch" property="glueSwitch" jdbcType = "VARCHAR"/>
+	    <result column="glue_source" property="glueSource" jdbcType = "CLOB"/>
+	    <result column="glue_remark" property="glueRemark" jdbcType = "VARCHAR"/>
 
-		<result column="child_jobkey" property="childJobKey" />
+		<result column="child_jobkey" property="childJobKey" jdbcType = "VARCHAR"/>
 	</resultMap>
 
 	<sql id="Base_Column_List">
@@ -46,35 +46,43 @@
 	</sql>
 	
 	<select id="pageList" parameterType="java.util.HashMap" resultMap="XxlJobInfo">
-		SELECT <include refid="Base_Column_List" />
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO AS t
-		<trim prefix="WHERE" prefixOverrides="AND | OR" >
-			<if test="jobGroup gt 0">
-				AND t.job_group = #{jobGroup}
-			</if>
-			<if test="executorHandler != null and executorHandler != ''">
-				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
-			</if>
-		</trim>
-		ORDER BY id DESC
-		LIMIT #{offset}, #{pagesize}
+	
+	select b.* from(
+   		 select a.*,rownum rn from (
+				SELECT <include refid="Base_Column_List" />
+				FROM XXL_JOB_QRTZ_TRIGGER_INFO t
+				<trim prefix="WHERE" prefixOverrides="AND | OR" >
+					<if test="jobGroup gt 0">
+						AND t.job_group = #{jobGroup,jdbcType=INTEGER}
+					</if>
+					<if test="executorHandler != null and executorHandler != ''">
+						AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler,jdbcType=VARCHAR}), '%')
+					</if>
+				</trim>
+				ORDER BY id DESC
+	    )a where rownum  <![CDATA[ <= ]]> (#{offset,jdbcType=INTEGER}+#{pagesize,jdbcType=INTEGER}-1)
+	) b where b.rn  <![CDATA[ >= ]]> #{offset,jdbcType=INTEGER}
 	</select>
 	
 	<select id="pageListCount" parameterType="java.util.HashMap" resultType="int">
 		SELECT count(1)
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO AS t
+		FROM XXL_JOB_QRTZ_TRIGGER_INFO t
 		<trim prefix="WHERE" prefixOverrides="AND | OR" >
 			<if test="jobGroup gt 0">
-				AND t.job_group = #{jobGroup}
+				AND t.job_group = #{jobGroup,jdbcType=INTEGER}
 			</if>
 			<if test="executorHandler != null and executorHandler != ''">
-				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler}), '%')
+				AND t.executor_handler like CONCAT(CONCAT('%', #{executorHandler,jdbcType=VARCHAR}), '%')
 			</if>
 		</trim>
 	</select>
 	
 	<insert id="save" parameterType="com.xxl.job.admin.core.model.XxlJobInfo" useGeneratedKeys="true" keyProperty="id" >
+	    <selectKey resultType="int" order="BEFORE" keyProperty="id">  
+	         SELECT SEQ_XXL_JOB_QRTZ_TRIGGER_INFO.NEXTVAL FROM dual  
+	    </selectKey>  
 		INSERT INTO XXL_JOB_QRTZ_TRIGGER_INFO (
+			id,
 			job_group,
 			job_name,
 			job_cron,
@@ -90,49 +98,46 @@
 			glue_remark,
 			child_jobkey
 		) VALUES (
-			#{jobGroup}, 
-			#{jobName}, 
-			#{jobCron}, 
-			#{jobDesc},
-			NOW(),
-			NOW(),
-			#{author},
-			#{alarmEmail},
-			#{executorHandler},
-			#{executorParam},
-			#{glueSwitch},
-			#{glueSource},
-			#{glueRemark},
-			#{childJobKey}
-		);
-		<selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id"> 
-			SELECT LAST_INSERT_ID() 
-		</selectKey> 
+			#{id,jdbcType=INTEGER}, 
+			#{jobGroup,jdbcType=INTEGER}, 
+			#{jobName,jdbcType=VARCHAR}, 
+			#{jobCron,jdbcType=VARCHAR}, 
+			#{jobDesc,jdbcType=VARCHAR},
+			sysdate,
+			sysdate,
+			#{author,jdbcType=VARCHAR},
+			#{alarmEmail,jdbcType=VARCHAR},
+			#{executorHandler,jdbcType=VARCHAR},
+			#{executorParam,jdbcType=VARCHAR},
+			#{glueSwitch,jdbcType=INTEGER},
+			#{glueSource,jdbcType=CLOB},
+			#{glueRemark,jdbcType=VARCHAR},
+			#{childJobKey,jdbcType=VARCHAR}
+		)
 	</insert>
-	
 	<select id="load" parameterType="java.util.HashMap" resultMap="XxlJobInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO AS t
-		WHERE t.job_group = #{jobGroup}
-			AND t.job_name = #{jobName}
+		FROM XXL_JOB_QRTZ_TRIGGER_INFO t
+		WHERE t.job_group = #{jobGroup,jdbcType=INTEGER}
+			AND t.job_name = #{jobName,jdbcType=VARCHAR}
 	</select>
 	
 	<update id="update" parameterType="com.xxl.job.admin.core.model.XxlJobInfo" >
 		UPDATE XXL_JOB_QRTZ_TRIGGER_INFO
 		SET 
-			job_cron = #{jobCron},
-			job_desc = #{jobDesc},
-			update_time = NOW(),
-			author = #{author},
+			job_cron = #{jobCron,jdbcType=VARCHAR},
+			job_desc = #{jobDesc,jdbcType=VARCHAR},
+			update_time = sysdate,
+			author = #{author,jdbcType=VARCHAR},
 			alarm_email = #{alarmEmail},
-			executor_handler = #{executorHandler},
+			executor_handler = #{executorHandler,jdbcType=VARCHAR},
 			executor_param = #{executorParam},
-			glue_switch = #{glueSwitch},
-			glue_source = #{glueSource},
-			glue_remark = #{glueRemark},
-			child_jobkey = #{childJobKey}
-		WHERE job_group = #{jobGroup}
-			AND job_name = #{jobName}
+			glue_switch = #{glueSwitch,jdbcType=INTEGER},
+			glue_source = #{glueSource,jdbcType=CLOB},
+			glue_remark = #{glueRemark,jdbcType=VARCHAR},
+			child_jobkey = #{childJobKey,jdbcType=VARCHAR}
+		WHERE job_group = #{jobGroup,jdbcType=INTEGER}
+			AND job_name = #{jobName,jdbcType=VARCHAR}
 	</update>
 	
 	<delete id="delete" parameterType="java.util.HashMap">
@@ -140,14 +145,14 @@
 		FROM
 			XXL_JOB_QRTZ_TRIGGER_INFO
 		WHERE
-			job_group = #{jobGroup}
-		AND job_name = #{jobName}
+			job_group = #{jobGroup,jdbcType=INTEGER}
+		AND job_name = #{jobName,jdbcType=VARCHAR}
 	</delete>
 
 	<select id="getJobsByGroup" parameterType="java.util.HashMap" resultMap="XxlJobInfo">
 		SELECT <include refid="Base_Column_List" />
-		FROM XXL_JOB_QRTZ_TRIGGER_INFO AS t
-		WHERE t.job_group = #{jobGroup}
+		FROM XXL_JOB_QRTZ_TRIGGER_INFO t
+		WHERE t.job_group = #{jobGroup,jdbcType=INTEGER}
 	</select>
 	
 </mapper>

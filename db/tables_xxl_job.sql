@@ -153,17 +153,17 @@ CREATE TABLE XXL_JOB_QRTZ_TRIGGER_INFO (
   child_jobkey varchar2(255) DEFAULT NULL,
   PRIMARY KEY (id)
 ); 
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.job_group is 'ÈÎÎñ×é(Ö´ÐÐÆ÷ID)';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.job_name is 'ÈÎÎñÃû';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.job_cron is 'ÈÎÎñÖ´ÐÐCRON';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.author is '×÷Õß';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.alarm_email is '±¨¾¯ÓÊ¼þ';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.executor_handler is 'Ö´ÐÐÆ÷ÈÎÎñhandler';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.executor_param is 'Ö´ÐÐÆ÷ÈÎÎñ²ÎÊý';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.glue_switch is 'GLUEÄ£Ê½¿ª¹Ø£º0-·ñ£¬1-ÊÇ';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.glue_source is 'GLUEÔ´´úÂë';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.glue_remark is 'GLUE±¸×¢';
-  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.child_jobkey is '×ÓÈÎÎñKey';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.job_group is 'ä»»åŠ¡ç»„(æ‰§è¡Œå™¨ID)';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.job_name is 'ä»»åŠ¡å';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.job_cron is 'ä»»åŠ¡æ‰§è¡ŒCRON';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.author is 'ä½œè€…';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.alarm_email is 'æŠ¥è­¦é‚®ä»¶';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.executor_handler is 'æ‰§è¡Œå™¨ä»»åŠ¡handler';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.executor_param is 'æ‰§è¡Œå™¨ä»»åŠ¡å‚æ•°';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.glue_switch is 'GLUEæ¨¡å¼å¼€å…³ï¼š0-å¦ï¼Œ1-æ˜¯';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.glue_source is 'GLUEæºä»£ç ';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.glue_remark is 'GLUEå¤‡æ³¨';
+  comment on column XXL_JOB_QRTZ_TRIGGER_INFO.child_jobkey is 'å­ä»»åŠ¡Key';
 
 create sequence SEQ_XXL_JOB_QRTZ_TRIGGER_INFO
 minvalue 1
@@ -172,7 +172,7 @@ start with 1
 increment by 1
 cycle;
 
-
+/*
 create or replace trigger TRI_XXL_JOB_QRTZ_TRIGGER_INFO
   before insert on XXL_JOB_QRTZ_TRIGGER_INFO 
   for each row
@@ -180,6 +180,7 @@ declare
 begin    
   select SEQ_XXL_JOB_QRTZ_TRIGGER_INFO.nextval into :new.ID from dual;  
 end;
+*/
 
 -- ============================================
 
@@ -198,17 +199,17 @@ CREATE TABLE XXL_JOB_QRTZ_TRIGGER_LOG (
   handle_msg varchar2(2048) DEFAULT NULL,
   PRIMARY KEY (id)
 );
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.job_group is 'ÈÎÎñ×é';
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.job_name is 'ÈÎÎñÃû';
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.executor_address is 'Ö´ÐÐÆ÷µØÖ·£¬±¾´ÎÖ´ÐÐµÄµØÖ·';
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.executor_handler is 'Ö´ÐÐÆ÷ÈÎÎñhandler';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.job_group is 'ä»»åŠ¡ç»„';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.job_name is 'ä»»åŠ¡å';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.executor_address is 'æ‰§è¡Œå™¨åœ°å€ï¼Œæœ¬æ¬¡æ‰§è¡Œçš„åœ°å€';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.executor_handler is 'æ‰§è¡Œå™¨ä»»åŠ¡handler';
   comment on column XXL_JOB_QRTZ_TRIGGER_LOG.executor_param  is 'executor_param';
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.trigger_time is 'µ÷¶È-Ê±¼ä';
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.trigger_status is 'µ÷¶È-½á¹û';
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.trigger_msg is 'µ÷¶È-ÈÕÖ¾';
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.handle_time is 'Ö´ÐÐ-Ê±¼ä';
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.handle_status is 'Ö´ÐÐ-×´Ì¬';
-  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.handle_msg is 'Ö´ÐÐ-ÈÕÖ¾';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.trigger_time is 'è°ƒåº¦-æ—¶é—´';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.trigger_status is 'è°ƒåº¦-ç»“æžœ';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.trigger_msg is 'è°ƒåº¦-æ—¥å¿—';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.handle_time is 'æ‰§è¡Œ-æ—¶é—´';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.handle_status is 'æ‰§è¡Œ-çŠ¶æ€';
+  comment on column XXL_JOB_QRTZ_TRIGGER_LOG.handle_msg is 'æ‰§è¡Œ-æ—¥å¿—';
 
 
 
@@ -219,6 +220,7 @@ start with 1
 increment by 1
 cycle;
 
+/*
 
 create or replace trigger TRI_XXL_JOB_QRTZ_TRIGGER_LOG
   before insert on XXL_JOB_QRTZ_TRIGGER_LOG 
@@ -228,6 +230,7 @@ begin
   select SEQ_XXL_JOB_QRTZ_TRIGGER_LOG.nextval into :new.ID from dual;  
 end;
 
+*/
 -- ==================================================
 
 CREATE TABLE XXL_JOB_QRTZ_TRIGGER_LOGGLUE (
@@ -248,7 +251,7 @@ start with 1
 increment by 1
 cycle;
 
-
+/*
 create or replace trigger TRI_XXL_JOB_QRTZ_TRIGGER_LOGL  
   before insert on XXL_JOB_QRTZ_TRIGGER_LOGGLUE    
   for each row
@@ -256,6 +259,7 @@ declare
 begin    
   select SEQ_XXL_JOB_QRTZ_TRIGGER_LOGL.nextval into :new.ID from dual;  
 end;
+*/ 
 
 -- ==================================================
 CREATE TABLE XXL_JOB_QRTZ_TRIGGER_REGISTRY (
@@ -274,7 +278,7 @@ start with 1
 increment by 1
 cycle;
 
-
+/*
 create or replace trigger TRI_XXL_JOB_QRTZ_TRIGGER_REGIS  
   before insert on XXL_JOB_QRTZ_TRIGGER_REGISTRY    
   for each row
@@ -282,7 +286,7 @@ declare
 begin    
   select SEQ_XXL_JOB_QRTZ_TRIGGER_REGIS.nextval into :new.ID from dual;  
 end;
-
+-- */
 
 
 -- ===================================================
@@ -301,7 +305,7 @@ start with 1
 increment by 1
 cycle;
 
-
+/*
 create or replace trigger TRI_XXL_JOB_QRTZ_TRIGGER_GROUP  
   before insert on XXL_JOB_QRTZ_TRIGGER_GROUP    
   for each row
@@ -309,25 +313,25 @@ declare
 begin    
   select SEQ_XXL_JOB_QRTZ_TRIGGER_GROUP.nextval into :new.ID from dual;  
 end;
+*/
 
-
-INSERT INTO XXL_JOB_QRTZ_TRIGGER_GROUP(APP_NAME,TITLE,grup_order) VALUES ('xxl-job-executor-example', 'Ê¾ÀýÖ´ÐÐÆ÷','1');
+INSERT INTO XXL_JOB_QRTZ_TRIGGER_GROUP(APP_NAME,TITLE,grup_order) VALUES ('xxl-job-executor-example', 'ç¤ºä¾‹æ‰§è¡Œå™¨','1');
 
 select * from XXL_JOB_QRTZ_TRIGGER_GROUP;
 
 commit;
 
 /*
-    ±íÃû£ºXXL_JOB_QRTZ_PAUSED_TRIGGER_GRPS  XXL_JOB_QRTZ_PD_TRIGGER_GRPS
-    ÁÐÃ÷£ºXXL_JOB_QRTZ_TRIGGER_GROUP.order »»³É grup_order
+    è¡¨åï¼šXXL_JOB_QRTZ_PAUSED_TRIGGER_GRPS  XXL_JOB_QRTZ_PD_TRIGGER_GRPS
+    åˆ—æ˜Žï¼šXXL_JOB_QRTZ_TRIGGER_GROUP.order æ¢æˆ grup_order
 
     varchar => varchar2
     datetime => date
 
-    ÐòÁÐ 
+    åºåˆ— 
 
 
-    ´¥·¢Æ÷
+    è§¦å‘å™¨
 
 
 */

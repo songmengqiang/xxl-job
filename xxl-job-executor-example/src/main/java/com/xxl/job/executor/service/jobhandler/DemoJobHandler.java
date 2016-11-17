@@ -31,12 +31,13 @@ public class DemoJobHandler extends IJobHandler {
 	@Override
 	public void execute(String... params) throws Exception {
 		logger.info("XXL-JOB, Hello World.");
-//		Date date = new Date();
-//		System.out.println("xxl-job-timestamp:"+DateUtils.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
-		for (int i = 0; i < 2; i++) {
-			logger.info("beat at:{}", i);
-			TimeUnit.SECONDS.sleep(2);
-		}
+		Date date = new Date();
+		System.out.println("xxl-job-timestamp:"+DateUtils.formatDate(date, "yyyy-MM-dd HH:mm:ss"));
+		TimeUnit.SECONDS.sleep(2);
+//		for (int i = 0; i < 2; i++) {
+//			logger.info("beat at:{}", i);
+//			TimeUnit.SECONDS.sleep(2);
+//		}
 	}
 	
 }
